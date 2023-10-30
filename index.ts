@@ -58,3 +58,65 @@ function noImplicitType(firstArgument: string, secondArgument: string) {
 //noImplicitType(1, 2)// me da error porque estoy tipando al argumento como string
 noImplicitType('Oscar', 'Alejandro') // Ya no me da error
 // el tipado obligatorio de los argumentos se puede desactivar en tsconfig.json 'noImplicitAny': false
+
+// Tuple
+let person: [string, number] = ['Franco', 26]
+person = ['Oscar', 30] // la puedo cambiar
+
+// Arreglos
+let arreglo: number[] = [1, 2, 3, 4]
+arreglo.push(8) // no le puedo pushear otra cosa que no sea un número
+
+let stringArray: string[] = ['Oscar', 'Sancho']
+let oscar = stringArray.shift() // no es necesario tipar la variable oscar porque está implícito cuando uso el método shift en stringArray (que es un array de strings)
+oscar.length // tengo todos los métodos de los strings
+
+// Otra sintaxis de los arrays
+let numbersArray: Array<number> = [2, 3, 5, 8]
+
+// Objetos
+// - Tipado inferido
+const user = {
+    nombre: 'Oscar',
+    apellido: 'Sancho'
+}
+
+// - Tipado explícito
+interface User {
+    nombre: string,
+    apellido: string,
+    edad: number,
+    hobbies: Hobbie[]
+}
+
+interface Hobbie {
+    name: string
+}
+
+const user2: User = {
+    nombre: 'matias',
+    apellido: 'lamela',
+    edad: 23,
+    hobbies: []
+}
+
+// extends
+interface Estudiante extends User { // no es necesario reescribir código, sino que hereda las claves de la interface User
+    // nombre: string,
+    // apellido: string,
+    // edad: number,
+    isActive: boolean,
+    saludo: () => void
+}
+
+let pechocha: Estudiante = {
+    nombre: 'pechocha',
+    apellido: 'homocha',
+    edad: 100,
+    isActive: true,
+    saludo: () => console.log('Hola' + nombre),
+    hobbies: [{name: 'leer'}] // solo se pueden agregar objetos con valor del tipo que tipé en la interface Hobbie
+}
+
+pechocha.hobbies[0].name // así puedo acceder
+
