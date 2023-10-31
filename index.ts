@@ -166,3 +166,47 @@ class Estudiante extends Persona {
 
 const Fede = new Persona('Fede', 29, 'fede@gmail.com')
 
+// ----
+// Funciones
+/* Sintaxis:
+function nombreFunction(parametroUno: TIPADO, parametroDos: TIPADO): TIPADO_RETURN
+*/
+function suma (a: number, b: number): number {
+    return a + b
+}
+
+const result = suma(2, 2) // mi variable automáticamente tomará el tipado del retorno de la función
+
+// función tipo void
+function consoleLog(): void { // si le pongo void es porque no retornará nada
+    console.log('Función tipo void porque no hay return');
+}
+
+// función tipo never
+function throwError(msg: string): never { // La función será de tipo never si es que retornará un error
+    throw new Error(msg)
+}
+
+// parámetro opcional
+function suma2 (a: number, b: number, c?: number) {
+    return a + b + c
+}
+
+const result2 = suma2(1, 2, 3) // el último parámetro puede ir o no
+
+// tipado alternativo
+function suma3 (a: number | string, b: number | string): number | string | void { // otra forma es hacer dos funciones diferentes y ya
+    if(typeof a === 'number' && typeof b === 'number') return a + b
+    if(typeof a === 'string' && typeof b === 'string') return a + b
+}
+const result3 = suma3(1, 2)
+
+// otra solución
+function suma4 (a: number | string, b: number | string): number | string | void { // otra forma es hacer dos funciones diferentes y ya
+    if(typeof a === 'string') a = parseInt(a)
+    if(typeof b === 'string') b = parseInt(b)
+
+    return a + b
+}
+
+// es necesario hacer esto porque TS, a comparación de JS, no puede sumar o concatenar dependiendo si es number o string; puede solo sumar o concanetar
