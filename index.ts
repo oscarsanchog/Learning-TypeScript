@@ -210,3 +210,74 @@ function suma4 (a: number | string, b: number | string): number | string | void 
 }
 
 // es necesario hacer esto porque TS, a comparación de JS, no puede sumar o concatenar dependiendo si es number o string; puede solo sumar o concanetar
+
+// Generic functions
+// - Las generics function están para solucionar este problema:
+const array = [1, 2, 3, 4]
+const arrayString= ['a', 'b', 'c']
+
+function firstElement(arr: any[]){ // declaré al parámetro como any
+  return arr[0]
+}
+const elemento = firstElement(array) // esto es un problema porque la nueva variable declarada será any
+const elementoString = firstElement(arrayString) // También es any
+
+// Solución: pasarle el tipado por parámetro
+function secondElement<Type>(arr: Type[]): Type { // por conveción es Type, también se suele encontrar como <T>
+  return arr[0]
+}
+let elemento2 = secondElement(array) // magia, ya no es any, sino que agarra el tipado del parámetro que se le envió a la función
+let elementoString2 = secondElement<string>(arrayString) // tipado explícito
+
+// trabajar con generic functions y objetos
+function merge<U extends object, V extends object>(obj1: U, obj2: V) {
+  return {
+    ...obj1,
+    ...obj2
+  }
+} // esto se utiliza para que cuando yo llame a mi función, me advierta con un error de que lo que le estoy pasando no es un objeto
+
+merge({name: 'Franco'}, {age: 25})
+//merge({name: 'Franco'}, 23) // me da error porque 23 no es un objeto 
+
+// Se usa generic functions cuando estoy usando arreglo y objetos
+// Las actions en redux son funciones genéricas.
+// El axios.post y axios.get también
+// Otro ejemplo es el useState de react, también usa generic functions. Cuando no se le pone el estado inicial, es necesario pasarle el tipado por parámetro con <>
+
+// ----
+// function overloads
+function resta1(a: number, b: string): string;
+function resta1(a: string, b: number): string;
+function resta1(a: string, b: string): string;
+function resta1(a: number, b: number): number;
+function resta1(a: number | string, b: number | string): number | string {
+  if (typeof a === "number" && typeof b === "number") {
+    return a + b;
+  } else {
+    return "Error: Los argumentos no son números.";
+  }
+}
+
+let resultado = resta1(2, 2)
+
+// otro ejemplo:
+function makeDate(timestamp: number): Date;
+function makeDate(m: number, d: number, y: number): Date;
+function makeDate(mOrTimestamp: number, d?: number, y?: number): Date {
+  if (d !== undefined && y !== undefined) {
+    return new Date(y, mOrTimestamp, d);
+  } else {
+    return new Date(mOrTimestamp);
+  }
+}
+
+makeDate(12345678); // 1970-01-01T03:25:45.678Z
+makeDate(3, 5, 2021); // 2021-04-05T03:00:00.000Z
+//makeDate(1, 3); // Error: No overload expects 2 arguments, but overloads
+		// do exist that expect either 1 or 3 arguments.
+
+// Hay que instalar los types de react para trabajar con él, sino se rompe toro. Hay que averiguar eso.
+
+// ----
+
